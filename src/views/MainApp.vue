@@ -1,20 +1,22 @@
 <template>
-  <div class="about" v-resize="checkIfMobile">
+  <div class="main-app" v-resize="checkIfMobile">
     <navigation-mob-comp v-if="windowMobile"></navigation-mob-comp>
     <navigation-desk-comp v-else></navigation-desk-comp>
-    <h1>This is an about page</h1>
+    <main-desk-comp></main-desk-comp>
   </div>
 </template>
 
 <script>
-const NavigationMob = () => import(/* webpackChunkName: "navigation-component" */ '@/components/NavigationMob.vue')
-const NavigationDesk = () => import(/* webpackChunkName: "navigation-component" */ '@/components/NavigationDesk.vue')
+const NavigationMob = () => import(/* webpackChunkName: "navigation-mob-component" */ '@/components/NavigationMob.vue')
+const NavigationDesk = () => import(/* webpackChunkName: "navigation-desk-component" */ '@/components/NavigationDesk.vue')
+const MainDesk = () => import(/* webpackChunkName: "main-desk-component" */ '@/components/MainDesk.vue')
 
 export default {
-  name: 'About',
+  name: 'mainApp',
   components: {
     'navigation-mob-comp': NavigationMob,
-    'navigation-desk-comp': NavigationDesk
+    'navigation-desk-comp': NavigationDesk,
+    'main-desk-comp': MainDesk
   },
   data () {
     return {
@@ -34,7 +36,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

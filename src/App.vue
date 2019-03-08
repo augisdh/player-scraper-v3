@@ -1,31 +1,48 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-content>
+      <router-view/>
+    </v-content>
+  </v-app>
 </template>
+
+<script>
+
+export default {
+  name: 'App',
+  data () {
+    return {
+      mobileView: this.setView()
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        this.mobileView = this.setView()
+      })
+    })
+  },
+  methods: {
+    setView () {
+      const screenWidth = document.documentElement.clientWidth
+      return (screenWidth <= 750)
+    }
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.setView)
+  }
+}
+</script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
+  background-color: #fff;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.text-underline {
+  text-decoration: underline;
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.text-size-14 {
+  font-size: 14px;
 }
 </style>
