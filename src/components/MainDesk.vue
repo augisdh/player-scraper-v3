@@ -1,15 +1,21 @@
 <template>
   <div class="main-wrapper">
     <v-container grid-list-xl>
-      <v-layout justify-center class="mt-1">
-        <v-card class="input-card-wrapper mt-5">
+      <v-layout justify-center>
+        <v-card class="input-card-wrapper">
           <v-card class="input-card white">
             <v-flex xs12 class="input-flex align-center">
-              <input type="text" class="input-search font-weight-bold input_gray--text" name="name" id="name" placeholder="Player name" v-model="playerName">
+              <input
+                type="text"
+                class="input-search font-weight-bold input_gray--text"
+                name="name"
+                id="name"
+                placeholder="Player name"
+                v-model="playerObj.playerName">
               <v-combobox
-                v-model="resultsYear"
+                v-model="playerObj.resultsYear"
                 :items="['2019', '2018', '2017', '2016', '2015']"
-                label="Select year"
+                placeholder="Select year"
                 class="input-search font-weight-bold"
                 chips
                 solo>
@@ -24,9 +30,9 @@
             </v-flex>
             <v-flex xs12 class="input-flex align-center">
               <v-combobox
-                v-model="pokerRoom"
+                v-model="playerObj.pokerRoom"
                 :items="['Pokerstars']"
-                label="Poker room"
+                placeholder="Poker room"
                 class="input-search font-weight-bold"
                 chips
                 solo>
@@ -39,9 +45,9 @@
                 </template>
               </v-combobox>
               <v-combobox
-                v-model="tournamentType"
+                v-model="playerObj.tournamentType"
                 :items="['ALL', 'SCHEDULED', 'MTT', 'SNG', 'STT', 'HEADS-UP']"
-                label="Tournament type"
+                placeholder="Tournament type"
                 class="input-search font-weight-bold"
                 chips
                 solo>
@@ -54,31 +60,78 @@
                 </template>
               </v-combobox>
             </v-flex>
+            <v-flex v-show="selectedTournament !== ''" xs12 class="input-flex align-center">
+              <v-combobox
+                v-model="selectedTournament"
+                :items="[]"
+                placeholder="Select tournament"
+                class="input-search font-weight-bold"
+                chips
+                :maxlength="10"
+                solo>
+                <template v-slot:selection="data">
+                  <v-chip
+                    :selected="data.selected"
+                    close>
+                    <strong>{{ data.item }}</strong>
+                  </v-chip>
+                </template>
+              </v-combobox>
+            </v-flex>
           </v-card>
-          <v-btn @click="searchPlayer" class="search-btn pink white--text subheading">Search</v-btn>
+          <v-btn @click="sendSearchPlayerToMain" class="search-btn pink white--text subheading">Search</v-btn>
         </v-card>
       </v-layout>
-      <v-layout class="mt-2">
+      <v-layout v-show="selectedTournament !== ''">
         <v-flex xs12 class="content-wrapper">
-          <v-card class="mt-2 m-b-3">
+          <v-card class="m-b-3">
             <v-flex xs10 offset-xs1>
-              <v-card-text class="font-weight-medium">Player Name <span class="blue--text ml-1">{{ playerName }}</span></v-card-text>
+              <v-card-text class="table_black--text font-weight-medium">Player Name <span class="blue--text ml-1">player name</span></v-card-text>
             </v-flex>
           </v-card>
           <v-card class="m-b-3">
             <v-flex xs10 offset-xs1>
-              <v-card-text class="font-weight-medium">Selected tournament <span class="blue--text ml-1">TCOOP-21: $27</span></v-card-text>
+              <v-card-text class="table_black--text font-weight-medium">Selected tournament <span class="blue--text ml-1">{{ selectedTournament }}</span></v-card-text>
             </v-flex>
           </v-card>
           <v-card class="m-b-3">
             <v-flex xs10 offset-xs1>
-              <v-card-text class="font-weight-medium">Tournament name....</v-card-text>
+              <table class="player-table">
+                <thead>
+                  <tr>
+                    <th class="table_black--text font-weight-medium text-xs-left">Games played</th>
+                    <th class="table_black--text font-weight-medium text-xs-center">Buy-in</th>
+                    <th class="table_black--text font-weight-medium text-xs-right">Avg profit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="input_gray--text font-weight-medium text-xs-left">12313</td>
+                    <td class="input_gray--text font-weight-medium text-xs-center">545</td>
+                    <td class="input_gray--text font-weight-medium text-xs-right">2244</td>
+                  </tr>
+                </tbody>
+              </table>
             </v-flex>
           </v-card>
-          <v-card class="mb-3">
+          <v-card>
             <v-flex xs10 offset-xs1>
-              <v-card-text class="font-weight-medium">AVG profit...</v-card-text>
-              <v-card-text class="font-weight-medium">$10000</v-card-text>
+              <table class="player-table">
+                <thead>
+                  <tr>
+                    <th class="table_black--text font-weight-medium text-xs-left">Avg ROI %</th>
+                    <th class="table_black--text font-weight-medium text-xs-center">ITM %</th>
+                    <th class="table_black--text font-weight-medium text-xs-right">Total profit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-weight-medium text-xs-left">12</td>
+                    <td class="font-weight-medium text-xs-center">22994545</td>
+                    <td class="font-weight-medium text-xs-right">555</td>
+                  </tr>
+                </tbody>
+              </table>
             </v-flex>
           </v-card>
         </v-flex>
@@ -88,24 +141,42 @@
 </template>
 
 <script>
-import firebase from 'firebase'
 
 export default {
   name: 'MainDesk',
-  data () {
-    return {
-      playerName: '',
-      resultsYear: '',
-      pokerRoom: '',
-      tournamentType: ''
+  props: {
+    playerData: {
+      type: Array
     }
   },
-  created () {
-    console.log(firebase.auth().currentUser.uid)
+  data () {
+    return {
+      playerObj: {
+        playerName: '',
+        resultsYear: '',
+        pokerRoom: 'Pokerstars',
+        tournamentType: ''
+      },
+      selectedTournament: this.playerData[0].selectedTournament
+    }
   },
   methods: {
-    searchPlayer () {
-      console.log({ playerName: this.playerName, resultsYear: this.resultsYear, pokerRoom: this.pokerRoom, tournamentType: this.tournamentType })
+    sendSearchPlayerToMain () {
+      (this.checkSearchPlayerInputs()) ? this.$emit('req_data', this.playerObj) : alert('Player name field must be filled out!')
+    },
+    checkSearchPlayerInputs () {
+      if (this.playerObj.playerName === '') {
+        return false
+      } else {
+        if (this.playerObj.resultsYear === '') {
+          this.playerObj.resultsYear = '2019'
+        }
+
+        if (this.playerObj.tournamentType === '') {
+          this.playerObj.tournamentType = 'ALL'
+        }
+        return true
+      }
     }
   }
 }
@@ -122,9 +193,8 @@ export default {
 
 .input-card-wrapper {
   position: relative;
-  max-width: 648px;
-  width: 100%;
-  height: 217px;
+  padding: 17px 44px 0 44px;
+  margin-top: 31px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,41 +206,42 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 0;
+    bottom: 35px;
     left: 0;
     background-color: #edf1f3;
     filter: blur(30px);
   }
 
-.input-card {
-  max-width: 560px;
-  width: 100%;
-  min-height: 184px !important;
+.input-card-wrapper .input-card {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
   border-radius: 10px !important;
   box-shadow: none;
 }
-  .input-flex {
+  .input-card-wrapper .input-flex {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    margin: 15px 0;
+    justify-content: space-between;
+    height: 117px;
+    padding: 0 !important;
+    margin: 31px 27px 36px 27px !important;
   }
 
 #name {
   border: 1px solid #e0e0e0;
+  padding-left: 12px;
 }
-.input-search {
-  width: 221px;
-  max-height: 48px;
+.input-card-wrapper .input-search {
+  flex: none;
+  max-width: 221px;
+  width: 100%;
+  height: 48px !important;
   height: 100%;
-  text-align: center;
+  text-align: left;
   font-size: 18px;
   outline: none;
 }
-.search-btn {
+.input-card-wrapper .search-btn {
   width: 108px;
   height: 40px;
   transform: translateY(-25px);
@@ -178,8 +249,9 @@ export default {
   border-radius: 50px;
 }
 
-.input-search::placeholder {
-  color: #bdbdbd !important;
+.input-card-wrapper .input-search::placeholder,
+.v-input__slot .v-select__selections > input::placeholder {
+  color: #bdbdbd;
 }
 
 /* Inside Dropdown box <v-combobox> updates */
@@ -207,6 +279,10 @@ export default {
   font-weight: bold !important;
   font-size: 18px !important;
   color: #828282;
+  max-width: 142px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .v-list .v-list__tile .v-list__tile__title {
   color: #828282;
@@ -216,7 +292,7 @@ export default {
 /* Content layout */
 .content-wrapper {
   position: relative;
-  padding: 25px;
+  padding: 22px 15px 28px 15px !important;
 }
   .content-wrapper::before {
     content: '';
@@ -245,4 +321,21 @@ export default {
     padding: 0;
   }
 
+.player-table {
+  width: 100%;
+}
+tbody:before {
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 21px;
+    display: block;
+}
+.player-table th,
+.player-table td {
+  width: 25%;
+  text-align: left;
+}
 </style>

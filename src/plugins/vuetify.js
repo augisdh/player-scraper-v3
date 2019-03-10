@@ -15,7 +15,8 @@ Vue.use(Vuetify, {
     black_3: '#333',
     active_black: '#555',
     disactive: '#000',
-    blur: '#EDF1F3'
+    blur: '#EDF1F3',
+    table_black: '#4F4F4F'
   },
   breakpoint: {
     thresholds: {
