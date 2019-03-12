@@ -87,7 +87,7 @@ export default {
 .v-btn--active:before,
 .v-btn:hover:before,
 .v-btn:focus:before {
-  background-color: transparent !important;
+  background-color: transparent;
 }
 
 </style>

@@ -83,7 +83,7 @@
         </v-card>
       </v-layout>
       <v-layout v-show="selectedTournament !== ''">
-        <v-flex xs12 class="content-wrapper">
+        <v-flex xs12 class="content-wrapper-desk">
           <v-card class="m-b-3">
             <v-flex xs10 offset-xs1>
               <v-card-text class="table_black--text font-weight-medium">Player Name <span class="blue--text ml-1">player name</span></v-card-text>
@@ -101,14 +101,14 @@
                   <tr>
                     <th class="table_black--text font-weight-medium text-xs-left">Games played</th>
                     <th class="table_black--text font-weight-medium text-xs-center">Buy-in</th>
-                    <th class="table_black--text font-weight-medium text-xs-right">Avg profit</th>
+                    <th class="table_black--text font-weight-medium text-xs-right">Total profit</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td class="input_gray--text font-weight-medium text-xs-left">12313</td>
                     <td class="input_gray--text font-weight-medium text-xs-center">545</td>
-                    <td class="input_gray--text font-weight-medium text-xs-right">2244</td>
+                    <td class="input_gray--text font-weight-medium text-xs-right">555</td>
                   </tr>
                 </tbody>
               </table>
@@ -119,16 +119,16 @@
               <table class="player-table">
                 <thead>
                   <tr>
-                    <th class="table_black--text font-weight-medium text-xs-left">Avg ROI %</th>
-                    <th class="table_black--text font-weight-medium text-xs-center">ITM %</th>
-                    <th class="table_black--text font-weight-medium text-xs-right">Total profit</th>
+                    <th class="table_black--text font-weight-medium text-xs-left">Avg profit</th>
+                    <th class="table_black--text font-weight-medium text-xs-center">Avg ROI %</th>
+                    <th class="table_black--text font-weight-medium text-xs-right">ITM %</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="font-weight-medium text-xs-left">12</td>
-                    <td class="font-weight-medium text-xs-center">22994545</td>
-                    <td class="font-weight-medium text-xs-right">555</td>
+                    <td class="font-weight-medium text-xs-left">2244</td>
+                    <td class="font-weight-medium text-xs-center">12</td>
+                    <td class="font-weight-medium text-xs-right">37</td>
                   </tr>
                 </tbody>
               </table>
@@ -290,11 +290,11 @@ export default {
 }
 
 /* Content layout */
-.content-wrapper {
+.content-wrapper-desk {
   position: relative;
   padding: 22px 15px 28px 15px !important;
 }
-  .content-wrapper::before {
+  .content-wrapper-desk::before {
     content: '';
     position: absolute;
     top: 0;
@@ -305,7 +305,7 @@ export default {
     filter: blur(30px);
   }
 
-.content-wrapper > .v-card {
+.content-wrapper-desk > .v-card {
   border-radius: 10px;
   border: 1px solid #EDF1F3;
   box-shadow: none;
@@ -313,11 +313,11 @@ export default {
 }
 
   div.mt-2 .v-card.v-sheet.theme--light > div,
-  .content-wrapper > .v-card .v-card__text {
+  .content-wrapper-desk > .v-card .v-card__text {
     padding-left: 0;
     padding-right: 0;
   }
-  .content-wrapper > .v-card .v-card__text {
+  .content-wrapper-desk > .v-card .v-card__text {
     padding: 0;
   }
 
