@@ -2,7 +2,7 @@
   <div class="main-wrapper">
     <v-container grid-list-xl>
       <v-layout justify-center>
-        <v-card class="input-card-wrapper">
+        <div class="input-card-wrapper">
           <v-card class="input-card white">
             <v-flex xs12 class="input-flex align-center">
               <input
@@ -80,7 +80,7 @@
             </v-flex>
           </v-card>
           <v-btn @click="sendSearchPlayerToMain" class="search-btn pink white--text subheading">Search</v-btn>
-        </v-card>
+        </div>
       </v-layout>
       <v-layout v-show="selectedTournament !== ''">
         <v-flex xs12 class="content-wrapper-desk">

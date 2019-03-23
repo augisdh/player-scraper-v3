@@ -9,28 +9,7 @@
 <script>
 
 export default {
-  name: 'App',
-  data () {
-    return {
-      mobileView: this.setView()
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        this.mobileView = this.setView()
-      })
-    })
-  },
-  methods: {
-    setView () {
-      const screenWidth = document.documentElement.clientWidth
-      return (screenWidth <= 750)
-    }
-  },
-  beforeDestroy () {
-    window.removeEventListener('resize', this.setView)
-  }
+  name: 'App'
 }
 </script>
 
@@ -38,11 +17,23 @@ export default {
 #app {
   background-color: #fff;
 }
-
+.h-100 {
+  height: 100%;
+}
 .text-underline {
   text-decoration: underline;
 }
 .text-size-14 {
   font-size: 14px;
+}
+.flex-d {
+  display: flex;
+}
+.t-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.c-pointer {
+  cursor: pointer;
 }
 </style>

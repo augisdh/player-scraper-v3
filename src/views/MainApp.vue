@@ -1,8 +1,8 @@
 <template>
-  <div class="main-app" v-resize="checkIfMobile">
-    <div v-if="windowMobile">
+  <div class="main-app h-100" v-resize="checkIfMobile">
+    <div v-if="windowMobile" class="h-100">
       <navigation-mob-comp></navigation-mob-comp>
-      <main-mob-comp></main-mob-comp>
+      <main-mob-comp :playerData="playerData" @req_data="configAndPushPlayer"></main-mob-comp>
     </div>
     <div v-else>
       <navigation-desk-comp></navigation-desk-comp>
@@ -30,7 +30,7 @@ export default {
   data () {
     return {
       windowMobile: null,
-      playerData: dataDummy
+      playerData: [{ selectedTournament: '' }]
     }
   },
   created () {

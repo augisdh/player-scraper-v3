@@ -2,7 +2,7 @@
   <v-app id="login">
     <v-layout row wrap>
       <v-flex class="content-wrap justify-content-center align-center">
-        <v-container fluid class="justify-center">
+        <v-container fluid class="justify-center px-3 py-4">
           <v-layout row wrap>
             <v-flex>
               <h1 class="title-text blue--text font-weight-bold">Take your poker game to the next level</h1>
